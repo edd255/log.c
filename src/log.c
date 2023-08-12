@@ -52,21 +52,23 @@ static void stdout_callback(log_event_t* event) {
 #ifdef LOGC_USE_COLOR
     fprintf(
         event->udata,
-        "%s \x1b[1m%s%-5s\x1b[0m %s:%d - ",
+        "%s \x1b[1m%s%-5s\x1b[0m %s:%d in %s - ",
         buf,
         level_colors[event->level],
         level_strings[event->level],
         event->file,
         event->line,
+        event->fn
     );
 #else
     fprintf(
         event->udata,
-        "%s %-5s %s:%d -",
+        "%s %-5s %s:%d in %s -",
         buf,
         level_strings[event->level],
         event->file,
-        event->line
+        event->line,
+        event->fn
     );
 #endif
     vfprintf(event->udata, event->fmt, event->args);
@@ -79,11 +81,12 @@ static void file_callback(log_event_t* event) {
     buf[strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", event->time)] = '\0';
     fprintf(
         event->udata,
-        "%s %-5s %s:%d - ",
+        "%s %-5s %s:%d in %s - ",
         buf,
         level_strings[event->level],
         event->file,
-        event->line
+        event->line,
+        event->fn
     );
     vfprintf(event->udata, event->fmt, event->args);
     fprintf(event->udata, "\n");
@@ -141,7 +144,7 @@ static void init_event(log_event_t* event, void* udata) {
     event->udata = udata;
 }
 
-void log_log(int level, const char* file, int line, const char* fmt, ...) {
+void log_log(int level, const char* fn, const char* file, int line, const char* fmt, ...) {
     log_event_t event = {
         .fmt = fmt,
         .file = file,
