@@ -64,7 +64,7 @@ static void stdout_callback(log_event_t* event) {
 #else
     fprintf(
         event->udata,
-        "%s %-5s %s:%d in %s -",
+        "%s %-5s %s:%d in %s - ",
         buf,
         level_strings[event->level],
         event->file,
@@ -148,6 +148,7 @@ static void init_event(log_event_t* event, void* udata) {
 void log_log(int level, const char* fn, const char* file, int line, const char* fmt, ...) {
     log_event_t event = {
         .fmt = fmt,
+        .fn = fn,
         .file = file,
         .line = line,
         .level = level,
