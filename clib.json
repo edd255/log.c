@@ -1,5 +1,5 @@
 {
-  "name": "log.c",
+  "name": "logger",
   "version": "0.2.0",
   "repo": "edd255/log.c",
   "description": "A simple logging library implemented in C99",
