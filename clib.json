@@ -1,0 +1,11 @@
+{
+  "name": "log.c",
+  "version": "0.2.0",
+  "repo": "edd255/log.c",
+  "description": "A simple logging library implemented in C99",
+  "license": "MIT",
+  "src": [
+    "src/log.c",
+    "src/log.h"
+  ]
+}
