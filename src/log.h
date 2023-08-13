@@ -32,12 +32,12 @@ typedef void (*logc_lockfn_t)(bool lock, void* udata);
 
 enum { LOGC_TRACE, LOGC_DEBUG, LOGC_INFO, LOGC_WARN, LOGC_ERROR, LOGC_FATAL };
 
-#define log_trace(...) log_log(LOG_TRACE, __func__, __FILE__, __LINE__, __VA_ARGS__)
-#define log_debug(...) log_log(LOG_DEBUG, __func__, __FILE__, __LINE__, __VA_ARGS__)
-#define log_info(...)  log_log(LOG_INFO, __func__, __FILE__, __LINE__, __VA_ARGS__)
-#define log_warn(...)  log_log(LOG_WARN, __func__, __FILE__, __LINE__, __VA_ARGS__)
-#define log_error(...) log_log(LOG_ERROR, __func__, __FILE__, __LINE__, __VA_ARGS__)
-#define log_fatal(...) log_log(LOG_FATAL, __func__, __FILE__, __LINE__, __VA_ARGS__)
+#define log_trace(...) log_log(LOGC_TRACE, __func__, __FILE__, __LINE__, __VA_ARGS__)
+#define log_debug(...) log_log(LOGC_DEBUG, __func__, __FILE__, __LINE__, __VA_ARGS__)
+#define log_info(...)  log_log(LOGC_INFO, __func__, __FILE__, __LINE__, __VA_ARGS__)
+#define log_warn(...)  log_log(LOGC_WARN, __func__, __FILE__, __LINE__, __VA_ARGS__)
+#define log_error(...) log_log(LOGC_ERROR, __func__, __FILE__, __LINE__, __VA_ARGS__)
+#define log_fatal(...) log_log(LOGC_FATAL, __func__, __FILE__, __LINE__, __VA_ARGS__)
 
 const char* log_level_string(int level);
 void log_set_lock(logc_lockfn_t fn, void* udata);
