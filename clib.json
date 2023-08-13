@@ -1,7 +1,7 @@
 {
   "name": "logger",
   "version": "0.2.0",
-  "repo": "edd255/log.c",
+  "repo": "edd255/logger",
   "description": "A simple logging library implemented in C99",
   "license": "MIT",
   "src": [
