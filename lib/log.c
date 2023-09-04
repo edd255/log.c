@@ -106,7 +106,7 @@ static void unlock(void) {
     }
 }
 
-const char* log_level_string(int level) {
+const char* log_level_string(enum logc_level_t level) {
     return level_strings[level];
 }
 
@@ -115,7 +115,7 @@ void log_set_lock(logc_lockfn_t fn, void* udata) {
     logc_logger_t.udata = udata;
 }
 
-void log_set_level(int level) {
+void log_set_level(enum logc_level_t level) {
     logc_logger_t.level = level;
 }
 
@@ -123,7 +123,7 @@ void log_set_quiet(bool enable) {
     logc_logger_t.quiet = enable;
 }
 
-int log_add_callback(logc_logfn_t fn, void* udata, int level) {
+int log_add_callback(logc_logfn_t fn, void* udata, enum logc_level_t level) {
     for (int i = 0; i < MAX_CALLBACKS; i++) {
         if (!logc_logger_t.callbacks[i].fn) {
             logc_logger_t.callbacks[i] = (callback_t) {fn, udata, level};
@@ -133,7 +133,7 @@ int log_add_callback(logc_logfn_t fn, void* udata, int level) {
     return -1;
 }
 
-int log_add_fp(FILE* fp, int level) {
+int log_add_fp(FILE* fp, enum logc_level_t level) {
     return log_add_callback(file_callback, fp, level);
 }
 
@@ -145,7 +145,14 @@ static void init_event(log_event_t* event, void* udata) {
     event->udata = udata;
 }
 
-void log_log(int level, const char* fn, const char* file, int line, const char* fmt, ...) {
+void log_log(
+    enum logc_level_t level,
+    const char* fn,
+    const char* file,
+    int line,
+    const char* fmt,
+    ...
+) {
     log_event_t event = {
         .fmt = fmt,
         .fn = fn,
@@ -154,7 +161,7 @@ void log_log(int level, const char* fn, const char* file, int line, const char* 
         .level = level,
     };
     lock();
-    if (!logc_logger_t.quiet && level >= logc_logger_t.level) {
+    if (!logc_logger_t.quiet && (int) level >= logc_logger_t.level) {
         init_event(&event, stderr);
         va_start(event.args, fmt);
         stdout_callback(&event);
@@ -162,7 +169,7 @@ void log_log(int level, const char* fn, const char* file, int line, const char* 
     }
     for (int i = 0; i < MAX_CALLBACKS && logc_logger_t.callbacks[i].fn; i++) {
         callback_t* cb = &logc_logger_t.callbacks[i];
-        if (level >= cb->level) {
+        if ((int) level >= cb->level) {
             init_event(&event, cb->udata);
             va_start(event.args, fmt);
             cb->fn(&event);

@@ -16,6 +16,15 @@
 
 #define LOG_VERSION "0.2.0"
 
+enum logc_level_t {
+    LOGC_TRACE,
+    LOGC_DEBUG,
+    LOGC_INFO,
+    LOGC_WARN,
+    LOGC_ERROR,
+    LOGC_FATAL
+};
+
 typedef struct {
     va_list args;
     const char* fmt;
@@ -24,13 +33,11 @@ typedef struct {
     struct tm* time;
     void* udata;
     int line;
-    int level;
+    enum logc_level_t level;
 } log_event_t;
 
 typedef void (*logc_logfn_t)(log_event_t* ev);
 typedef void (*logc_lockfn_t)(bool lock, void* udata);
-
-enum { LOGC_TRACE, LOGC_DEBUG, LOGC_INFO, LOGC_WARN, LOGC_ERROR, LOGC_FATAL };
 
 #define log_trace(...) log_log(LOGC_TRACE, __func__, __FILE__, __LINE__, __VA_ARGS__)
 #define log_debug(...) log_log(LOGC_DEBUG, __func__, __FILE__, __LINE__, __VA_ARGS__)
@@ -39,13 +46,20 @@ enum { LOGC_TRACE, LOGC_DEBUG, LOGC_INFO, LOGC_WARN, LOGC_ERROR, LOGC_FATAL };
 #define log_error(...) log_log(LOGC_ERROR, __func__, __FILE__, __LINE__, __VA_ARGS__)
 #define log_fatal(...) log_log(LOGC_FATAL, __func__, __FILE__, __LINE__, __VA_ARGS__)
 
-const char* log_level_string(int level);
+const char* log_level_string(enum logc_level_t level);
 void log_set_lock(logc_lockfn_t fn, void* udata);
-void log_set_level(int level);
+void log_set_level(enum logc_level_t level);
 void log_set_quiet(bool enable);
-int log_add_callback(logc_logfn_t fn, void* udata, int level);
-int log_add_fp(FILE* fp, int level);
+int log_add_callback(logc_logfn_t fn, void* udata, enum logc_level_t level);
+int log_add_fp(FILE* fp, enum logc_level_t level);
 
-void log_log(int level, const char* fn, const char* file, int line, const char* fmt, ...);
+void log_log(
+    enum logc_level_t level,
+    const char* fn,
+    const char* file,
+    int line,
+    const char* fmt,
+    ...
+);
 
 #endif
