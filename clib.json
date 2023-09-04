@@ -5,7 +5,7 @@
   "description": "A simple logging library implemented in C99",
   "license": "MIT",
   "src": [
-    "src/log.c",
-    "src/log.h"
+    "lib/log.c",
+    "lib/log.h"
   ]
 }
