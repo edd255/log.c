@@ -26,7 +26,7 @@ LIB       := lib
 #---- CODE FILES ---------------------------------------------------------------
 
 PROJ_SRCS := $(shell find src -type f -name "*.c" -o -name "*.h")
-SRC_DIRS  := $(SRC_DIR) $(wildcard ./deps/*)
+SRC_DIRS  := $(SRC_DIR) $(wildcard ./lib/*)
 INC_DIRS  := $(shell find $(SRC_DIRS) -type d)
 TESTS     := $(wildcard tests/*)
 
